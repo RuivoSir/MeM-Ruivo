@@ -1,21 +1,13 @@
-import { POWER_EFFECT_COSTS, POWER_EFFECT_DESCRIPTIONS } from '../../data/mm3e'
+import {
+  POWER_EFFECT_COSTS,
+  POWER_EFFECT_DESCRIPTIONS,
+  computePowerCost,
+} from '../../data/mm3e'
 
 let uid = 0
 function nextId() {
   uid += 1
   return `power-${Date.now()}-${uid}`
-}
-
-// Custo = (custo-base do efeito + Extras - Falhas) por graduação, com o
-// mínimo de 1 ponto por graduação — igual à conta do livro.
-export function computePowerCost(power) {
-  const base = POWER_EFFECT_COSTS[power.effect] ?? 1
-  const perRank = Math.max(1, base + (Number(power.extras) || 0) - (Number(power.flaws) || 0))
-  return perRank * (Number(power.rank) || 0)
-}
-
-export function totalPowersCost(powers) {
-  return (powers || []).reduce((sum, p) => sum + computePowerCost(p), 0)
 }
 
 export default function PowersEditor({ powers, onChange, readOnly }) {

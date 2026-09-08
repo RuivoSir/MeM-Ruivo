@@ -39,6 +39,14 @@ export const APPS = [
     gmOnly: true,
   },
   {
+    id: 'escudo',
+    label: 'Escudo do Mestre',
+    icon: '🛡️',
+    path: 'escudo',
+    color: 'linear-gradient(135deg,#485563,#29323c)',
+    gmOnly: true,
+  },
+  {
     id: 'info',
     label: 'Sala',
     icon: '⚙️',

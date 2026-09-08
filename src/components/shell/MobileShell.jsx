@@ -3,6 +3,7 @@ import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { APPS } from '../../data/apps'
 import { useRoom } from '../../contexts/RoomContext'
 import { useAuth } from '../../contexts/AuthContext'
+import ThemeToggle from '../common/ThemeToggle'
 
 function Clock() {
   const [now, setNow] = useState(new Date())
@@ -27,18 +28,20 @@ export default function MobileShell({ basePath }) {
     <div className="phone">
       <div className="phone__statusbar">
         <Clock />
-        <span className="phone__statusbar-room">{room?.name}</span>
         <span>🔋</span>
       </div>
 
       {isHome ? (
         <div className="phone__home">
           <div className="phone__greeting">
-            <p>Olá, {profile?.display_name || 'herói'}</p>
-            <p className="phone__room-code">
-              Sala <strong>{room?.id}</strong>
-              {isGM && <span className="badge badge--gm">Mestre</span>}
-            </p>
+            <div>
+              <p>Olá, {profile?.display_name || 'herói'}</p>
+              <p className="phone__room-code">
+                {room?.name} · <strong>{room?.id}</strong>
+                {isGM && <span className="badge badge--gm">Mestre</span>}
+              </p>
+            </div>
+            <ThemeToggle />
           </div>
           <div className="app-grid">
             {visibleApps.map((app) => (

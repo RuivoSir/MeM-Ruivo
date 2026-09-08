@@ -2,6 +2,7 @@ import { NavLink, Outlet } from 'react-router-dom'
 import { APPS } from '../../data/apps'
 import { useRoom } from '../../contexts/RoomContext'
 import { useAuth } from '../../contexts/AuthContext'
+import ThemeToggle from '../common/ThemeToggle'
 
 export default function DesktopShell({ basePath }) {
   const { room, isGM, leaveCurrentRoom } = useRoom()
@@ -37,6 +38,7 @@ export default function DesktopShell({ basePath }) {
           <div className="desktop__user-info">
             <strong>{profile?.display_name || 'Herói'}</strong>
             {isGM && <span className="badge badge--gm">Mestre</span>}
+            <ThemeToggle className="theme-toggle--inline" />
           </div>
           <div className="desktop__user-actions">
             <button className="btn-link" onClick={leaveCurrentRoom}>

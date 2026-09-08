@@ -116,6 +116,33 @@ export const POWER_EFFECT_COSTS = {
 
 export const POWER_EFFECTS = Object.keys(POWER_EFFECT_COSTS)
 
+// Custo = (custo-base do efeito + Extras - Falhas) por graduação, com o
+// mínimo de 1 ponto por graduação — igual à conta do livro.
+export function computePowerCost(power) {
+  const base = POWER_EFFECT_COSTS[power.effect] ?? 1
+  const perRank = Math.max(1, base + (Number(power.extras) || 0) - (Number(power.flaws) || 0))
+  return perRank * (Number(power.rank) || 0)
+}
+
+export function totalPowersCost(powers) {
+  return (powers || []).reduce((sum, p) => sum + computePowerCost(p), 0)
+}
+
+// Pontos de Habilidades, Defesas, Perícias e Poderes vêm sempre calculados
+// pelas regras do livro — só Vantagens fica a critério de quem edita, porque
+// o custo de cada vantagem varia (Sorte, Contatos, Benefício...).
+export function computePointsBreakdown(character) {
+  const abilities =
+    2 * Object.values(character?.abilities || {}).reduce((s, v) => s + (Number(v) || 0), 0)
+  const defenses = Object.values(character?.defenses || {}).reduce((s, v) => s + (Number(v) || 0), 0)
+  const skills = Math.ceil(
+    Object.values(character?.skill_ranks || {}).reduce((s, v) => s + (Number(v) || 0), 0) / 2
+  )
+  const powers = totalPowersCost(character?.powers)
+  const advantages = Number(character?.points_breakdown?.advantages || 0)
+  return { abilities, defenses, skills, powers, advantages }
+}
+
 // Resumo próprio (não é o texto do livro) do que cada efeito faz na prática,
 // só pra lembrete rápido ao montar o poder.
 export const POWER_EFFECT_DESCRIPTIONS = {
@@ -230,5 +257,20 @@ export function blankCharacter(roomCode, ownerUid) {
     complications: '',
     hero_points: 1,
     power_points: 0,
+  }
+}
+
+export const GM_CATEGORIES = [
+  { id: 'npc', label: 'NPCs', icon: '🧑' },
+  { id: 'vilao', label: 'Vilões', icon: '🦹' },
+  { id: 'heroi', label: 'Heróis', icon: '🦸' },
+]
+
+export function blankGmCharacter(roomCode, category) {
+  const { owner_uid: _owner_uid, ...rest } = blankCharacter(roomCode, null)
+  return {
+    ...rest,
+    category: category || 'npc',
+    hero_points: 0,
   }
 }

@@ -1,13 +1,14 @@
 :root {
-  --bg: #0a0d14;
-  --bg-elevated: #12161f;
-  --surface: #171c28;
-  --surface-2: #202634;
-  --border: #323c52;
-  --text: #eef1fa;
-  --text-muted: #8b93ab;
-  --accent: #ff5f6d;
-  --accent-2: #4facfe;
+  /* Tema escuro (padrão) — cinza-aço neutro com destaque ciano */
+  --bg: #15171b;
+  --bg-elevated: #1c1f24;
+  --surface: #24272e;
+  --surface-2: #2f333b;
+  --border: #454a54;
+  --text: #eef0f3;
+  --text-muted: #99a0ab;
+  --accent: #45d8e8;
+  --accent-2: #7c8cff;
   --accent-gold: #ffc94a;
   --danger: #ff6b6b;
   --success: #42e695;
@@ -16,6 +17,22 @@
   --panel-cut: 14px;
   --font-display: 'Rajdhani', 'Segoe UI', sans-serif;
   color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --bg: #e9ebef;
+  --bg-elevated: #f4f5f7;
+  --surface: #ffffff;
+  --surface-2: #eceef2;
+  --border: #d3d7de;
+  --text: #1b1e23;
+  --text-muted: #5c6270;
+  --accent: #0891a8;
+  --accent-2: #4b5bd1;
+  --accent-gold: #a3720a;
+  --danger: #d1453a;
+  --success: #1f9d55;
+  color-scheme: light;
 }
 
 * {
@@ -102,8 +119,8 @@ label {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--accent), #ffc371);
-  color: #1a1a1a;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #0a1014;
 }
 
 .btn-secondary {
@@ -203,16 +220,23 @@ label {
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: radial-gradient(circle at top, #1c2030, #05060a 70%);
+  background: radial-gradient(circle at top, var(--bg-elevated), var(--bg) 70%);
 }
 
 .auth-card {
+  position: relative;
   width: 100%;
   max-width: 380px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 28px;
+}
+
+.theme-toggle--corner {
+  position: absolute;
+  top: 14px;
+  right: 14px;
 }
 
 .auth-card--wide {
@@ -298,9 +322,26 @@ label {
 /* ---------- Mobile "phone" shell ---------- */
 .phone {
   height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(160deg, #241b3a, #0f1117 55%);
+  background: linear-gradient(160deg, var(--bg-elevated), var(--bg) 55%);
+  box-shadow: 0 0 0 10px #05060a, 0 0 0 12px #2a2d33, 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.phone::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 22px;
+  background: #05060a;
+  border-radius: 0 0 14px 14px;
+  z-index: 5;
 }
 
 .phone__statusbar {
@@ -320,6 +361,21 @@ label {
 .phone__greeting {
   margin-bottom: 20px;
   color: var(--text);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.theme-toggle {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  width: 34px;
+  height: 34px;
+  font-size: 1rem;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
 .phone__greeting p {
@@ -506,6 +562,13 @@ label {
 
 .desktop__user-info {
   margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.theme-toggle--inline {
+  margin-left: auto;
 }
 
 .desktop__user-actions {
@@ -621,6 +684,18 @@ label {
   flex-direction: row;
   align-items: center;
   text-align: left;
+}
+
+.contact-card__link {
+  background: none;
+  border: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: center;
 }
 
 .contact-card__photo,
@@ -918,6 +993,14 @@ label {
   position: sticky;
   top: 0;
   z-index: 5;
+}
+
+.sheet-status-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
 }
 
 .sheet-toolbar__select {

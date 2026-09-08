@@ -142,6 +142,44 @@ create table if not exists dice_rolls (
   created_at timestamptz not null default now()
 );
 
+-- Escudo do Mestre: fichas de NPCs, vilões e heróis que só o mestre vê e
+-- edita — mesmas colunas de "characters" (pra reaproveitar o mesmo editor
+-- de ficha no app), mais "category" pra organizar em abas.
+create table if not exists gm_characters (
+  id uuid primary key default gen_random_uuid(),
+  room_code text not null references rooms(code) on delete cascade,
+  category text not null default 'npc' check (category in ('npc', 'vilao', 'heroi')),
+  hero_name text default '',
+  player_name text default '',
+  identity text default '',
+  secret_identity boolean default false,
+  gender text default '',
+  age text default '',
+  height text default '',
+  weight text default '',
+  eyes text default '',
+  hair text default '',
+  group_name text default '',
+  base_of_operations text default '',
+  power_level integer default 10,
+  photo_url text default '',
+  points_breakdown jsonb default '{"abilities":0,"powers":0,"advantages":0,"skills":0,"defenses":0}',
+  abilities jsonb default '{}',
+  defenses jsonb default '{}',
+  initiative integer default 0,
+  attacks jsonb default '[]',
+  skill_ranks jsonb default '{}',
+  advantages jsonb default '[]',
+  powers jsonb default '[]',
+  equipment jsonb default '[]',
+  complications text default '',
+  hero_points integer default 0,
+  power_points integer default 0,
+  created_by uuid references auth.users(id),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 -- ---------------------------------------------------------------------------
 -- 2. FUNÇÕES AUXILIARES (security definer: evitam recursão nas policies)
 -- ---------------------------------------------------------------------------
@@ -215,6 +253,7 @@ alter table locations enable row level security;
 alter table npcs enable row level security;
 alter table npc_news enable row level security;
 alter table dice_rolls enable row level security;
+alter table gm_characters enable row level security;
 
 drop policy if exists "profiles_self" on profiles;
 create policy "profiles_self" on profiles
@@ -298,6 +337,12 @@ drop policy if exists "dice_rolls_select" on dice_rolls;
 create policy "dice_rolls_select" on dice_rolls
   for select using (is_room_gm(room_code));
 
+-- Escudo do Mestre: só o mestre (ou super-admin) lê ou escreve. Jogadores
+-- não têm nenhum acesso a esta tabela, nem de leitura.
+drop policy if exists "gm_characters_all" on gm_characters;
+create policy "gm_characters_all" on gm_characters
+  for all using (is_room_gm(room_code)) with check (is_room_gm(room_code));
+
 -- ---------------------------------------------------------------------------
 -- 4. REALTIME (para as telas atualizarem sozinhas, tipo Firestore onSnapshot)
 -- ---------------------------------------------------------------------------
@@ -311,7 +356,7 @@ declare
 begin
   foreach t in array array[
     'rooms', 'room_members', 'characters', 'contacts',
-    'locations', 'npcs', 'npc_news', 'dice_rolls'
+    'locations', 'npcs', 'npc_news', 'dice_rolls', 'gm_characters'
   ]
   loop
     if not exists (
