@@ -170,3 +170,4 @@ uma linha em `room_members` para aquela `room_code` (funções auxiliares
 `is_room_member` / `is_room_gm` / `is_room_owner` em `supabase/schema.sql`).
 Fotos ficam no bucket público `room-photos`; só membros da sala podem enviar.
 # MeM-Ruivo
+# MeM-Ruivo
