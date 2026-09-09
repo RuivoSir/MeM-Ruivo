@@ -176,6 +176,7 @@ export default function CharacterSheetPage() {
           </>
         )}
         {savedAt && <span className="muted">Salvo às {savedAt.toLocaleTimeString('pt-BR')}</span>}
+        {!canEdit && <span className="badge badge--gm">Somente leitura</span>}
       </div>
 
       <CharacterSheetEditor

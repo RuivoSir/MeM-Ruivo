@@ -1216,6 +1216,65 @@ label {
   white-space: nowrap;
 }
 
+/* ---------- Cards de seção da ficha (estilo Ordem Paranormal) ---------- */
+.sheet-pp-bar {
+  margin-bottom: 14px;
+}
+
+.section-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.section-card {
+  background: linear-gradient(160deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  color: var(--text);
+  min-height: 92px;
+  transition: transform 0.12s ease, border-color 0.12s ease;
+}
+
+.section-card:hover {
+  border-left-color: var(--accent-gold);
+  transform: translateY(-2px);
+}
+
+.section-card__top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-card__icon {
+  font-size: 1.3rem;
+}
+
+.section-card__label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 0.85rem;
+}
+
+.section-card__summary {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 /* ---------- Abas da ficha ---------- */
 .sheet-tabs {
   display: flex;
